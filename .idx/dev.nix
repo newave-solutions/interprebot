@@ -12,7 +12,6 @@
       pkgs.nodejs_20
       pkgs.nodePackages.nodemon
   ];
-
   # Sets environment variables in the workspace
   env = {};
   idx = {
@@ -20,7 +19,6 @@
     extensions = [
       "vscodevim.vim"
     ];
-
     # Enable previews
     previews = {
       enable = true;
