@@ -23,6 +23,10 @@
       default.openFiles = [ "README.md" "static/index.html" "server.ts" ];
     };
     # To run something each time the workspace is (re)started, use the `onStart` hook
+    onStart = {
+        # Authenticate gcloud
+        gcloud-auth = "gcloud auth application-default login";
+    };
   };
   # preview configuration, identical to monospace.json
   idx.previews = {
