@@ -14,7 +14,24 @@
   # search for the extension on https://open-vsx.org/ and use "publisher.id"
   idx.extensions = [
     "ms-toolsai.jupyter"
-      "ms-toolsai.jupyter-keymap"
+    "ms-toolsai.jupyter-keymap"
+    "esbenp.prettier-vscode"
+    "fabioz.vscode-pydev-python-debugger"
+    "franneck94.vscode-python-config"
+    "google.geminicodeassist"
+    "googlecloudtools.cloudcode"
+    "ms-python.debugpy"
+    "ms-python.python"
+    "ms-toolsai.jupyter-renderers"
+    "ms-toolsai.vscode-jupyter-cell-tags"
+    "ms-toolsai.vscode-jupyter-slideshow"
+    "antfu.browse-lite"
+    "antfu.vite"
+    "fabioz.vscode-pydev"
+    "hashicorp.terraform"
+    "project-accelerate.pythoninstaller"
+    "tht13.python"
+    "vitest.explorer"
   ];
   idx.workspace = {
     # Runs when a workspace is first created with this `dev.nix` file
@@ -24,9 +41,10 @@
     };
     # To run something each time the workspace is (re)started, use the `onStart` hook
     onStart = {
-        # Authenticate gcloud
-        gcloud-auth = "gcloud auth application-default login";
-    };
+          # Authenticate gcloud
+          gcloud-auth = "gcloud auth application-default login";
+      };
+ 
   };
   # preview configuration, identical to monospace.json
   idx.previews = {
