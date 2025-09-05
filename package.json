@@ -1,9 +1,21 @@
+
 {
-  "dependencies": {
-    "@react-three/drei": "^9.121.5",
-    "@react-three/fiber": "^8.17.14"
-  },
+  "name": "interprebot",
+  "version": "1.0.0",
+  "description": "Interprebot main project.",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "vite"
+    "install": "npm install --workspace=frontend && npm install --workspace=backend",
+    "start:frontend": "npm start --workspace=frontend",
+    "start:backend": "npm start --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "deploy": "npm run build:frontend && firebase deploy --only hosting"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
