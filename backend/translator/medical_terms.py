@@ -8,7 +8,7 @@ from google.cloud import translate_v3 as translate
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 translate_client = translate.TranslationServiceClient()
 
-def load_medical_terms(file_path="../../../data/medical_terms.json"):
+def load_medical_terms(file_path="../../data/medical_terms.json"):
     """Load medical terms from a JSON file."""
     try:
         # Construct path relative to this script's location
