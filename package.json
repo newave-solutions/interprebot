@@ -1,4 +1,3 @@
-
 {
   "name": "interprebot",
   "version": "1.0.0",
@@ -17,5 +16,10 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "backend": "^1.0.0",
+    "firebase": "^12.3.0",
+    "frontend": "^0.1.0"
   }
 }

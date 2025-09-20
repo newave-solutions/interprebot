@@ -22,6 +22,30 @@ def highlight_medical_terms(text):
     medical_terms = load_medical_terms_from_source()
 
     words = text.split()
+    import json
+from google.cloud import translate_v2 as translate
+
+# Initialize Translation API client
+translate_client = translate.Client()
+
+def load_medical_terms(file_path="/workspaces/interprebot/data/medical_terms.json"):
+    """Load medical terms from a JSON file."""
+    try:
+        with open(file_path, "r") as f:
+            medical_terms = json.load(f)
+        return set(medical_terms)  # Return as a set for faster lookups
+    except Exception as e:
+        print(f"Error loading medical terms: {e}")
+        return set()  # Return an empty set in case of failure
+
+def highlight_medical_terms(text):
+    """Identifies and highlights medical terms.
+       Uses Google Translate API as a fallback.
+    """
+    highlighted_text = ""
+    medical_terms = load_medical_terms()
+
+    words = text.split()
     for word in words:
         if word.lower() in medical_terms:
             highlighted_text += f"<span class='highlight'>{word}</span> "

@@ -1,17 +1,13 @@
-def transcribe_audio(audio_data):
-    """Transcribes audio data using Google Cloud Speech-to-Text API.
-       Handles both English and Spanish.
-    """
+from google.cloud import translate_v2 as translate
+
+# Initialize Translation client
+translate_client = translate.Client()
+
+def translate_text(text, target_language):
+    """Translates text using Google Cloud Translation API."""
     try:
-        audio = speech.RecognitionAudio(content=audio_data)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=44100,  # Adjust as needed
-            language_code="en-US",  # Start with English
-            alternative_language_codes=["es-ES"] # Add Spanish as an alternative
-        )
-        response = speech_client.recognize(config=config, audio=audio)
-        return response.results[0].alternatives[0].transcript
+        response = translate_client.translate(text, target_language=target_language)
+        return response["translatedText"]
     except Exception as e:
-        print(f"Speech-to-Text error: {e}")
-        return "" 
+        print(f"Translation error: {e}")
+        return ""

@@ -16,7 +16,7 @@ def transcribe_audio(audio_data):
             alternative_language_codes=["es-ES"] # Add Spanish as an alternative
         )
         response = speech_client.recognize(config=config, audio=audio)
-        return response.results.alternatives.transcript
+        return response.results[0].alternatives[0].transcript
     except Exception as e:
         print(f"Speech-to-Text error: {e}")
         return ""
