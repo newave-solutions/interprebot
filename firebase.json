@@ -1,53 +1,60 @@
 {
   "firestore": {
-    "database": "(default)",
-    "location": "us-central1",
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
   },
   "functions": [
     {
-      "source": "functions",
-      "codebase": "default",
+      "source": "backend/api",
+      "codebase": "api",
+      "runtime": "nodejs18",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    },
+    {
+      "source": "backend/translator",
+      "codebase": "translator",
+      "runtime": "python311",
       "ignore": [
         "venv",
         ".git",
         "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "runtime": "python313"
+        "firebase-debug.*.log"
+      ]
     }
   ],
-  "storage": {
-    "rules": "storage.rules"
-  },
-  "emulators": {
-    "auth": {
-      "port": 9099
-    },
-    "functions": {
-      "port": 5001
-    },
-    "firestore": {
-      "port": 8080
-    },
-    "hosting": {
-      "port": 5000
-    },
-    "storage": {
-      "port": 9199
-    },
-    "tasks": {
-      "port": 9499
-    },
-    "ui": {
-      "enabled": true
-    },
-    "singleProjectMode": true
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
-  },
-  "extensions": {}
+  "hosting": {
+    "public": "frontend/build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": {
+          "functionId": "api",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/translator/**",
+        "function": {
+          "functionId": "translator",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }

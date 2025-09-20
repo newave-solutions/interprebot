@@ -1,0 +1,46 @@
+steps:
+  # 1. Install frontend dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    id: 'Install frontend dependencies'
+    args: ['install']
+    dir: 'frontend'
+
+  # 2. Install Node.js API dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    id: 'Install API dependencies'
+    args: ['install']
+    dir: 'backend/api'
+
+  # 3. Install Python translator dependencies
+  - name: 'python:3.11' # Match runtime from firebase.json
+    id: 'Install translator dependencies'
+    entrypoint: 'pip'
+    args: ['install', '-r', 'requirements.txt']
+    dir: 'backend/translator'
+
+  # 4. Build the React frontend for production
+  - name: 'gcr.io/cloud-builders/npm'
+    id: 'Build frontend'
+    args: ['run', 'build']
+    dir: 'frontend'
+    waitFor: ['Install frontend dependencies']
+
+  # 5. Deploy to Firebase
+  # This step uses the community Firebase builder.
+  # It deploys hosting and all function codebases defined in firebase.json.
+  - name: 'gcr.io/firebase/firebase'
+    id: 'Deploy to Firebase'
+    args:
+      - 'deploy'
+      - '--project'
+      - '$PROJECT_ID' # Injects the project ID from the build environment
+      - '--only'
+      - 'hosting,functions'
+      - '--non-interactive'
+    waitFor:
+      - 'Build frontend'
+      - 'Install API dependencies'
+      - 'Install translator dependencies'
+
+# Timeout for the entire build process
+timeout: '1200s'

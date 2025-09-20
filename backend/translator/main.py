@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 from speech_to_text import transcribe_audio
 from medical_terms import highlight_medical_terms
-from translation import translate_text
+from backend.translator.translation import translate_text
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -18,10 +18,10 @@ def handle_audio_chunk(audio_chunk):
     try:
         # Step 1: Transcribe audio
         transcript = transcribe_audio(audio_chunk)
-        
+
         # Step 2: Highlight medical terms
         highlighted_transcript = highlight_medical_terms(transcript)
-        
+
         # Step 3: Emit the response back to the frontend
         socketio.emit("transcription", {"transcript": highlighted_transcript})
     except Exception as e:
