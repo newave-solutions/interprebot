@@ -9,7 +9,7 @@
     {
       "source": "backend/api",
       "codebase": "api",
-      "runtime": "nodejs18",
+      "runtime": "nodejs20",
       "ignore": [
         "node_modules",
         ".git",

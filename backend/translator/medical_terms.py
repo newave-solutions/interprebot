@@ -8,7 +8,7 @@ from google.cloud import translate_v3 as translate
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 translate_client = translate.TranslationServiceClient()
 
-def load_medical_terms(file_path="../../data/medical_terms.json"):
+def load_medical_terms(file_path="../../../data/medical_terms.json"):
     """Load medical terms from a JSON file."""
     try:
         # Construct path relative to this script's location
@@ -22,13 +22,33 @@ def load_medical_terms(file_path="../../data/medical_terms.json"):
         print(f"Error loading medical terms: {e}")
         return set()  # Return an empty set in case of failure
 
+def translate_text(text: str, target_language: str = None) -> dict:
+    """
+    Translates text using the Google Cloud Translation v3 API.
+    Detects source language if a target language is provided.
+    """
+    parent = f"projects/{project_id}"
+
+    if target_language:
+        # Detect source and translate to target
+        response = translate_client.translate_text(
+            parent=parent,
+            contents=[text],
+            target_language_code=target_language,
+        )
+        return response.translations[0]
+    else:
+        # Just detect the language
+        response = translate_client.detect_language(parent=parent, content=text)
+        # Return the first and most confident language detection
+        return response.languages[0]
+
 def highlight_medical_terms(text):
     """Identifies and highlights medical terms.
        Uses Google Translate API as a fallback.
     """
     highlighted_text = ""
     medical_terms = load_medical_terms()
-    parent = f"projects/{project_id}"
 
     words = text.split()
     for word in words:
@@ -36,22 +56,12 @@ def highlight_medical_terms(text):
             highlighted_text += f"<span class='highlight'>{word}</span> "
         else:
             try:
-                # Detect language using v3 client
-                response = translate_client.detect_language(parent=parent, content=word)
-                detected_language = response.languages[0].language_code
-
+                detected_language = translate_text(word).language_code
                 if detected_language == 'en':
                     target_language = 'es'
                 else:
                     target_language = 'en'
-
-                # Translate text using v3 client
-                response = translate_client.translate_text(
-                    parent=parent,
-                    contents=[word],
-                    target_language_code=target_language,
-                )
-                translation = response.translations[0]
+                translation = translate_text(word, target_language)
                 highlighted_text += f"<span class='translated'>{word} ({translation.translated_text})</span> "
             except Exception as e:
                 print(f"Translation error: {e}")
