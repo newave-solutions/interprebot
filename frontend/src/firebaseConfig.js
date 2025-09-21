@@ -11,6 +11,14 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
+// Validate that all required environment variables are present.
+// This helps catch configuration errors early during development.
+Object.entries(firebaseConfig).forEach(([key, value]) => {
+  if (!value) {
+    console.error(`Firebase config missing. Environment variable for '${key}' is not set.`);
+  }
+});
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
